@@ -1,9 +1,9 @@
 package KitchenNote;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,16 +12,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class Selenium {
-	
 
-	public static void main(String[] args) {
-		 
-        Selenium selTest = new Selenium();
-        selTest.crawl();
-        
-    }
- 
-    
     //WebDriver
     private WebDriver driver;
     
@@ -49,25 +40,29 @@ public class Selenium {
         
         base_url = "https://haemukja.com/main";
         
-        
-        
     }
  
-    public void crawl() {
+    public Set<Dto> crawl() {
  
         try {
         	driver.get(base_url);
-        	
+        	int man = 10000;
         	
 			List<WebElement> list = driver.findElements(By.cssSelector("ul.big_sort li a"));
+			Set<Dto> set = new HashSet<>();
 			ArrayList<Dto> ingre_list = new ArrayList<>();
 			for (WebElement webElement : list) {
 				webElement.click();
+				Thread.sleep(5000);
 				List<WebElement> ing_list = driver.findElements(By.cssSelector("ul.small_sort li a"));
 				for (WebElement webElement2 : ing_list) {
 					Dto dto = new Dto(Integer.parseInt(webElement.getAttribute("data-id")),webElement.getText(),Integer.parseInt(webElement2.getAttribute("ingre_id")),webElement2.getText());
-					ingre_list.add(dto);
-					System.out.println(dto.getIng_name());
+					if(man==10000&&dto.getIng_id()==2002) {
+						dto.setIng_id(dto.getIng_id()+man);
+						man=0;
+					}
+					set.add(dto);
+					System.out.println(dto);
 				}
 			}
 			
@@ -91,6 +86,8 @@ public class Selenium {
 			 * //로그인 버튼 클릭 webElement = driver.findElement(By.id("loginSubmit"));
 			 * webElement.submit();
 			 */
+			return set;
+			
         } catch (Exception e) {
             
             e.printStackTrace();
@@ -99,6 +96,9 @@ public class Selenium {
  
             driver.close();
         }
+		return null;
+        
+        
  
     }
 }

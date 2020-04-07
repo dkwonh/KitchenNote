@@ -7,4 +7,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from custom_recipe_info
 	</select>
 	
+	<insert id="insertIngre" parameterType="KitchenNote.Dto">
+		insert into Ingredient values(#{ing_id},#{ing_name},#{ing_category},#{category_name})
+	</insert>
+	
+	<insert id="insert" parameterType="KitchenNote.Recipe_Info">
+		insert into Custom_Recipe_Info(recipe_id,image,member_id,temp,recipe_name,recipe_exp,duration) values(#{RECIPE_ID},#{IMG_URL},#{member_id},0,#{RECIPE_NM_KO},#{SUMRY},#{COOKING_TIME}) 
+	</insert>
+	
+	<select id="ingreid" parameterType="String" resultType="int">
+		select ing_id from Ingredient where ing_name = #{IRDNT_NM}
+	</select>
+	
+	<insert id="ingreinsert" parameterType="KitchenNote.Ingredient">
+		insert into Custom_Recipe_Ingredient values(#{RECIPE_ID},#{IRDNT_CPCTY},#{ing_id})
+	</insert>
+	
+	<insert id="insertPro" parameterType="KitchenNote.Recipe_Pro">
+		insert into Custom_Recipe_Process values(#{RECIPE_ID},#{COOKING_DC},#{STRE_STEP_IMAGE_URL},#{COOKING_NO})
+	</insert>
+	
+	<select id="searchRecipe" parameterType="int" resultType="KitchenNote.Recipe_Info">
+		select * from Custom_Recipe_Info where recipe_id = #{info}
+	</select>
 </mapper>

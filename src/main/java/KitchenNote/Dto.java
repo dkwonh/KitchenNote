@@ -36,6 +36,47 @@ public class Dto {
 		this.ing_id = ing_id;
 		this.ing_name = ing_name;
 	}
+	@Override
+	public String toString() {
+		return "Dto [ing_category=" + ing_category + ", category_name=" + category_name + ", ing_id=" + ing_id
+				+ ", ing_name=" + ing_name + "]";
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((category_name == null) ? 0 : category_name.hashCode());
+		result = prime * result + ing_category;
+		result = prime * result + ((ing_name == null) ? 0 : ing_name.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Dto other = (Dto) obj;
+		if (category_name == null) {
+			if (other.category_name != null)
+				return false;
+		} else if (!category_name.equals(other.category_name))
+			return false;
+		if (ing_category != other.ing_category)
+			return false;
+		if (ing_name == null) {
+			if (other.ing_name != null)
+				return false;
+		} else if (!ing_name.equals(other.ing_name))
+			return false;
+		return true;
+	}
+	
+	
+	
+	
 	
 	
 }

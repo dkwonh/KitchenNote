@@ -5,6 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import KitchenNote.Dto;
+import KitchenNote.Ingredient;
+import KitchenNote.Recipe_Info;
+import KitchenNote.Recipe_Pro;
 import board.dao.CustomRecipeInfoDao;
 import board.dto.CustomRecipeInfo;
 
@@ -17,4 +21,35 @@ public class CustomRecipeInfoService {
 	public List<CustomRecipeInfo> selectAll(){
 		return customRecipeInfoDao.selectAll();
 	}
+	
+	public int ingInsert(Ingredient ing) {
+		return customRecipeInfoDao.ingInsert(ing);
+	}
+	
+	public List<Integer> ingId(String name) {
+		return customRecipeInfoDao.ingId(name);
+	}
+	
+	public int insertPro(Recipe_Pro pro) {
+		return customRecipeInfoDao.insertPro(pro);
+	}
+	
+	public List<Recipe_Info> selectRecipe(int info){
+		return customRecipeInfoDao.selectRecipe(info);
+	}
+	
+	/*
+	 * public int insert(Recipe_Info info) { return
+	 * customRecipeInfoDao.insert(info); }
+	 * 
+	 */ 
+	  public int insertIngre(Dto dto) { return
+	  customRecipeInfoDao.insertIngre(dto); }
+	 
+	
+	
+	/*재료 테이블 인서트 코드
+	 * public int insertIngre(Dto dto) { return
+	 * customRecipeInfoDao.insertIngre(dto); }
+	 */
 }
