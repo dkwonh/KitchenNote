@@ -1,12 +1,14 @@
 package board.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import KitchenNote.Dto;
 import KitchenNote.Ingredient;
+import KitchenNote.NangbuDto;
 import KitchenNote.Recipe_Info;
 import KitchenNote.Recipe_Pro;
 import board.dao.CustomRecipeInfoDao;
@@ -17,6 +19,22 @@ public class CustomRecipeInfoService {
 
 	@Autowired
 	CustomRecipeInfoDao customRecipeInfoDao;
+	
+	public List<CustomRecipeInfo> searchIngredient(int[] ingredients){
+		return customRecipeInfoDao.searchIngredient(ingredients);
+	}
+	
+	public List<CustomRecipeInfo> searchName(String recipe_Name){
+		return customRecipeInfoDao.searchName(recipe_Name);
+	}
+	
+	public List<NangbuDto> getNangbuIngre(int ing_category){
+		return customRecipeInfoDao.getNangbuIngre(ing_category);
+	}
+	
+	public Map<Integer,String> getNangCategory(){
+		return customRecipeInfoDao.getNangbuCategory();
+	}
 	
 	public List<CustomRecipeInfo> selectAll(){
 		return customRecipeInfoDao.selectAll();

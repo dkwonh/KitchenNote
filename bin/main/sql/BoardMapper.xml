@@ -4,10 +4,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="board">
 	<select id="selectAll" resultType="board.dto.CustomRecipeInfo">
-		select * from custom_recipe_info
+		select * from custom_recipe_info natural join members limit 5
 	</select>
 	
-	<insert id="insertIngre" parameterType="KitchenNote.Dto">
+	<select id="searchIngredient" resultType="board.dto.CustomRecipeInfo" parameterType="int">
+		select * 
+		from custom_recipe_info natural join members 
+		where recipe_id in (
+					select *
+                    from
+                    	<foreach collection="array" item="ingre" index="i" separator="natural join">
+                    	(
+                    		SELECT recipe_id
+							FROM ingredient natural join custom_recipe_ingredient
+							where ing_id = #{ingre}
+                        ) as r#{i} 
+                    	</foreach>
+                    	group by r0.recipe_id
+
+                    )
+	</select>
+	
+	<select id="searchName" parameterType="string" resultType="board.dto.CustomRecipeInfo">
+		select * from custom_recipe_info natural join members where recipe_name like CONCAT('%',#{recipe_Name},'%')
+	</select>
+	
+	<select id="getNangbuIngre" parameterType="int" resultType="KitchenNote.NangbuDto">
+		select * from ingredient where ing_category = #{ing_category}
+	</select>
+	
+	<select id="getNangbuCategory" resultType="map">
+		select ing_category,category_name from ingredient group by(ing_category)
+	</select>
+	
+</mapper>
+
+<!--
+	**테이블 작성시 필요 코드 현재 필요 없음
+ <insert id="insertIngre" parameterType="KitchenNote.Dto">
 		insert into Ingredient values(#{ing_id},#{ing_name},#{ing_category},#{category_name})
 	</insert>
 	
@@ -29,5 +63,4 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="searchRecipe" parameterType="int" resultType="KitchenNote.Recipe_Info">
 		select * from Custom_Recipe_Info where recipe_id = #{info}
-	</select>
-</mapper>
+	</select> -->

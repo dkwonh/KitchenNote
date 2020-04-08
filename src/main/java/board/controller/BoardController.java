@@ -2,6 +2,7 @@ package board.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.openqa.selenium.json.Json;
 import org.springframework.beans.BeansException;
@@ -25,12 +27,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+
 import KitchenNote.Dto;
 import KitchenNote.Ingredient;
 import KitchenNote.JsonToDB;
+import KitchenNote.NangbuDto;
 import KitchenNote.Recipe_Info;
 import KitchenNote.Recipe_Pro;
 import KitchenNote.Selenium;
+import board.dto.CustomRecipeInfo;
 
 
 @Controller
@@ -48,31 +54,43 @@ public class BoardController implements ApplicationContextAware {
 
 	@RequestMapping(value = "jsp/home.do", method = RequestMethod.GET)
 	public String list(Model model) {
-		model.addAttribute("dto", service.selectAll());
+		List<CustomRecipeInfo> list = service.selectAll();
 		
-		json = new JsonToDB();
-		List<Recipe_Pro> list = new ArrayList<>();
-		list = json.recipe_pro();
-		
-		for(Recipe_Pro pro : list) {
-			//System.out.println(pro);
-			if(pro.getSTRE_STEP_IMAGE_URL()==null) {
-				pro.setSTRE_STEP_IMAGE_URL("default.jsp");
-			}
-			
-			List<Recipe_Info> recipe = service.selectRecipe(pro.getRECIPE_ID());
-			if(recipe.isEmpty())
-				continue;
-			System.out.println(pro.getRECIPE_ID());
-			service.insertPro(pro);
-		}
+		model.addAttribute("dto", list);
 		
 		return "home/list";
 	}
 	
+	@RequestMapping(value = "jsp/nangbu.do", method = RequestMethod.GET)
+	public String nangbu(Model model) {	
+		List<NangbuDto> list = service.getNangbuIngre(1);
+		Map<Integer,String> category = service.getNangCategory();
+		model.addAttribute("category",category);
+		model.addAttribute("dto",list);
+		return "home/nangbu";
+	}
+	
+	@RequestMapping(value = "jsp/nangbu.do", method = RequestMethod.POST)
+	public String nangbuSearch(@RequestParam("ingredients[]") int ingredients[], Model model) {
+		List<CustomRecipeInfo> list = service.searchIngredient(ingredients);
+		model.addAttribute("dto", list);
+		return "home/searchList";
+	}
+	
+	@RequestMapping(value="jsp/category.do", method = RequestMethod.GET)
+	public void loadCategory(@RequestParam("ing_category") int ing_category,HttpServletResponse response) throws IOException{
+		List<NangbuDto> list = service.getNangbuIngre(ing_category);
+		Gson json = new Gson();
+		response.setContentType("text/thml;charset=utf-8");
+		PrintWriter out = response.getWriter();
+
+		out.print(json.toJson(list));
+	}
+	
 	@RequestMapping(value = "jsp/home.do", method = RequestMethod.POST)
 	public String search(String search, Model model) {
-		model.addAttribute("dto", search);
+		List<CustomRecipeInfo> list = service.searchName(search);
+		model.addAttribute("dto", list);
 		return "home/searchList";
 	}
 	

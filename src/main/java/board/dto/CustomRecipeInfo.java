@@ -20,12 +20,6 @@ private int recipe_Id;
  // 스크랩 
  private int scrap;
 
- // 일간조회수 
- private int d_ReadCount;
- private int w_ReadCount;
-
-
-
  // 레시피가격 
  private int price;
 
@@ -35,10 +29,30 @@ private int recipe_Id;
  // 레시피 이름 
  private String recipe_Name;
  private String recipe_Exp;
+ 
+ //필요시간
+ private String duration;
+ 
+ private String nickname;
 
 
+ public String getNickname() {
+	return nickname;
+}
 
- public String getImage() {
+public void setNickname(String nickname) {
+	this.nickname = nickname;
+}
+
+public String getDuration() {
+	return duration;
+}
+
+public void setDuration(String duration) {
+	this.duration = duration;
+}
+
+public String getImage() {
      return image;
  }
 
@@ -105,21 +119,6 @@ public void setMember_Id(String member_Id) {
 	this.member_Id = member_Id;
 }
 
-public int getD_ReadCount() {
-	return d_ReadCount;
-}
-
-public void setD_ReadCount(int d_ReadCount) {
-	this.d_ReadCount = d_ReadCount;
-}
-
-public int getW_ReadCount() {
-	return w_ReadCount;
-}
-
-public void setW_ReadCount(int w_ReadCount) {
-	this.w_ReadCount = w_ReadCount;
-}
 
 public String getRecipe_Name() {
 	return recipe_Name;
