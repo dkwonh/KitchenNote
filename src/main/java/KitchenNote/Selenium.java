@@ -1,8 +1,10 @@
 package KitchenNote;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.openqa.selenium.By;
@@ -40,6 +42,55 @@ public class Selenium {
         
         base_url = "https://haemukja.com/main";
         
+    }
+    
+    public List<Category> getCategory(){
+    	try {
+        	driver.get(base_url);
+        	WebElement click = driver.findElement(By.cssSelector("a.btn_all"));
+        	click.click();
+			List<WebElement> list = driver.findElements(By.cssSelector("div.menu_over ul li ul li label"));
+			List<Category> set = new ArrayList<>();
+			int i = 1;
+			for (WebElement webElement : list) {
+				Category cate = new Category();
+				cate.setCategory_id(i);
+				cate.setCategory_name(webElement.getText());
+				set.add(cate);
+				i++;
+			}
+			System.out.println(set);
+			
+    
+			/*
+			 * 
+			 * 
+			 * //get page (= 브라우저에서 url을 주소창에 넣은 후 request 한 것과 같다) driver.get(base_url);
+			 * 
+			 * //iframe으로 구성된 곳은 해당 프레임으로 전환시킨다.
+			 * driver.switchTo().frame(driver.findElement(By.id("loginForm")));
+			 * 
+			 * //iframe 내부에서 id 필드 탐색 webElement = driver.findElement(By.id("id")); String
+			 * daum_id ="your id"; webElement.sendKeys(daum_id);
+			 * 
+			 * //iframe 내부에서 pw 필드 탐색 webElement = driver.findElement(By.id("inputPwd"));
+			 * String daum_pw ="your pw"; webElement.sendKeys(daum_pw);
+			 * 
+			 * 
+			 * //로그인 버튼 클릭 webElement = driver.findElement(By.id("loginSubmit"));
+			 * webElement.submit();
+			 */
+			return set;
+			
+        } catch (Exception e) {
+            
+            e.printStackTrace();
+        
+        } finally {
+ 
+            driver.close();
+        }
+		return null;
     }
  
     public Set<Dto> crawl() {

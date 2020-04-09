@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
+import KitchenNote.Category;
 import KitchenNote.Dto;
 import KitchenNote.Ingredient;
 import KitchenNote.NangbuDto;
@@ -51,6 +52,18 @@ public class CustomRecipeInfoDao extends SqlSessionDaoSupport{
 	
 	public List<Recipe_Info> selectRecipe(int info){
 		return getSqlSession().selectList("board.searchRecipe",info);
+	}
+	
+	public void insertCategory(Category c) { 
+		getSqlSession().insert("board.insertCategory",c);
+	}
+	
+	public List<Category> loadCategory(){
+		return getSqlSession().selectList("board.loadCategory");
+	}
+	
+	public List<CustomRecipeInfo> searchCategory(int category[]){
+		return getSqlSession().selectList("board.searchCategory",category);
 	}
 	
 	/*

@@ -31,5 +31,7 @@ ${item.nickname }<br>
 </p>
 </fieldset>
 </c:forEach>
+
+
 </body>
 </html>

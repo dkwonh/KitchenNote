@@ -5,15 +5,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.json.Json;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 
+import KitchenNote.Category;
 import KitchenNote.Dto;
 import KitchenNote.Ingredient;
 import KitchenNote.JsonToDB;
@@ -36,6 +40,7 @@ import KitchenNote.NangbuDto;
 import KitchenNote.Recipe_Info;
 import KitchenNote.Recipe_Pro;
 import KitchenNote.Selenium;
+import board.dto.CategoryDto;
 import board.dto.CustomRecipeInfo;
 
 
@@ -51,9 +56,11 @@ public class BoardController implements ApplicationContextAware {
 	UploadService uploadService;
 	
 	JsonToDB json;
+	Selenium sel;
 
 	@RequestMapping(value = "jsp/home.do", method = RequestMethod.GET)
 	public String list(Model model) {
+
 		List<CustomRecipeInfo> list = service.selectAll();
 		
 		model.addAttribute("dto", list);
@@ -97,6 +104,35 @@ public class BoardController implements ApplicationContextAware {
 	@RequestMapping(value="jsp/admin.do", method=RequestMethod.GET)
 	public String adminMain() {
 		return "admin/adminMain";
+	}
+	
+	@RequestMapping(value="jsp/loadCategory.do", method=RequestMethod.GET)
+	public void loadCategory(HttpServletResponse response) throws IOException {
+		List<Category> list = service.loadCategory();
+		Gson json = new Gson();
+		response.setContentType("text/thml;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print(json.toJson(list));
+	}
+	
+	@RequestMapping(value="jsp/searchCategory.do", method=RequestMethod.GET)
+	public String searchCategory(CategoryDto category, Model model) throws IOException {
+		List<Integer> integer = new ArrayList<>();
+		int[] cate = {category.getCategory1(),category.getCategory2(),category.getCategory3(),category.getCategory4()};
+		for(int i : cate) {
+			if(i>0) {
+				integer.add(i);
+			}
+		}
+		int[] c = new int[integer.size()];
+		
+		for(int j = 0; j<integer.size(); j++) {
+			c[j] = integer.get(j);
+		}
+		
+		List<CustomRecipeInfo> list = service.searchCategory(c);
+		model.addAttribute("dto",list);
+		return "home/searchList";
 	}
 
 	/*
@@ -153,6 +189,11 @@ public class BoardController implements ApplicationContextAware {
 		Set<Dto> set = sel.crawl();
 		for(Dto dto : set) { service.insertIngre(dto); }
 		*/
+	
+	/*카테고리 삽입 코드
+	 * sel = new Selenium(); List<Category> cate = sel.getCategory(); for(Category c
+	 * : cate) { service.insertCategory(c); }
+	 */
 	
 	/*기본레시피 삽입 코드
 	 * jtd = new JsonToDB(); List<Recipe_Info> list = jtd.recipe_in();

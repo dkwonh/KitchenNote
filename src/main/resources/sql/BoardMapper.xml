@@ -37,6 +37,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select ing_category,category_name from ingredient group by(ing_category)
 	</select>
 	
+	<insert id="insertCategory" parameterType="KitchenNote.Category">
+		insert into category values(#{category_id},#{category_name})
+	</insert>
+	
+	<select id="loadCategory" resultType="KitchenNote.Category">
+		select * from category
+	</select>
+	
+	<select id="searchCategory" resultType="board.dto.CustomRecipeInfo" parameterType="int">
+		select * 
+		from custom_recipe_info natural join members 
+		where recipe_id in (
+					select *
+                    from
+                    	<foreach collection="array" item="id" index="i" separator="natural join">
+                    	(
+						SELECT recipe_id
+						FROM recipe_category natural join category
+						where category_id = #{id}
+						) as r#{i}
+                    	</foreach>
+                    	group by r0.recipe_id
+
+                    )
+	</select>
 </mapper>
 
 <!--

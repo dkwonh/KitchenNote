@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import KitchenNote.Category;
 import KitchenNote.Dto;
 import KitchenNote.Ingredient;
 import KitchenNote.NangbuDto;
@@ -54,6 +55,18 @@ public class CustomRecipeInfoService {
 	
 	public List<Recipe_Info> selectRecipe(int info){
 		return customRecipeInfoDao.selectRecipe(info);
+	}
+	
+	public void insertCategory(Category c) {
+		customRecipeInfoDao.insertCategory(c);
+	}
+	
+	public List<Category> loadCategory(){
+		return customRecipeInfoDao.loadCategory();
+	}
+	
+	public List<CustomRecipeInfo> searchCategory(int category[]){
+		return customRecipeInfoDao.searchCategory(category);
 	}
 	
 	/*
