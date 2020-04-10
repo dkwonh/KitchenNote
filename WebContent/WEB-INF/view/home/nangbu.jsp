@@ -12,9 +12,42 @@
 <script src="assets/js/util.js"></script>
 <script src="assets/js/main.js"></script>
 <style type="text/css">
-	fieldset {
-		display : inline-block;
-	}
+
+	.field1>ul {
+    height: 270px;
+    border: 1px solid #a73f40;
+    background: #fff;
+    float: left;
+    overflow-x: hidden;
+    overflow-y: visible;
+}
+
+}
+.big_sort {
+    width: 190px;
+    margin-right: 9px;
+    box-sizing: border-box;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+.small_sort {
+    width: 396px;
+    height: 270px;
+    float: left;
+    padding: 10px 13px;
+    box-sizing: border-box;
+    font-family: Microsoft YaHei,'NS';
+    box-sizing: border-box;
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <script>
@@ -32,7 +65,7 @@
 					$("#category").text("");
 				});
 				 for(var i=0; i < args.length; i++) {
-					  $("#category").append("<fieldset onclick=ingredients("+args[i].ing_id+",'"+args[i].ing_name+"')>"+args[i].ing_name +"</fieldset>");
+					  $("#category").append("<li onclick=ingredients("+args[i].ing_id+",'"+args[i].ing_name+"')>"+args[i].ing_name +"</li>");
 				 }
 	 			})
 		    .fail(function(e) {
@@ -42,7 +75,7 @@
 
 	function ingredients(id,name){
 		if($("#selected #"+id).length==0){
-			$("#selected").append("<fieldset id="+id+" onclick='diselectIngredients("+id+")'><input type='hidden' name='ingredients[]' value="+id+">"+name+"</fieldset>");
+			$("#selected").append("<li id="+id+" onclick='diselectIngredients("+id+")'><input type='hidden' name='ingredients[]' value="+id+">"+name+"</li>");
 		}
 		else{
 			$("#selected #"+id).remove();
@@ -52,26 +85,29 @@
 	function diselectIngredients(id){
 		$("#selected #"+id).remove();
 	}
+
 </script>
 </head>
 <body>
-<ul>
+<fieldset class=field1>
+<ul id="big_sort">
 <c:forEach var="category" items="${category }">
-	<li id="${category.key}" onclick="loadCategory(${category.key})">${category.value.category_name}
+	<li id="${category.key}" onclick="loadCategory(${category.key})">${category.value.category_name}<li>
 </c:forEach>
 </ul>
 
 
-<div id="category">
+<ul id="category" class="small_sort">
 <c:forEach var="item" items="${dto }">
-	<fieldset onclick="ingredients(${item.ing_id},'${item.ing_name }')">${item.ing_name } </fieldset>
+	<li onclick="ingredients(${item.ing_id},'${item.ing_name }')">${item.ing_name } </li>
 </c:forEach>
-</div>
+</ul>
 <form method="post" action="nangbu.do">
 <div id="selected">
 재료를 선택하세요
 </div>
 <input type="submit" value="재료로검색">
 </form>
+</fieldset>
 </body>
 </html>

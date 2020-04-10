@@ -57,18 +57,28 @@ public class BoardController implements ApplicationContextAware {
 	
 	JsonToDB json;
 	Selenium sel;
-
-	@RequestMapping(value = "jsp/home.do", method = RequestMethod.GET)
+	//메인화면
+	@RequestMapping(value = "home.do", method = RequestMethod.GET)
 	public String list(Model model) {
 
 		List<CustomRecipeInfo> list = service.selectAll();
+		List<Category> categoryList = service.loadCategory();
+		List<NangbuDto> nangbuList = service.getNangbuIngre(1);
+		Map<Integer,String> nangbuCategory = service.getNangCategory();
+				
+		model.addAttribute("nangbuList",nangbuList);
+		model.addAttribute("nangbuCategory",nangbuCategory);
 		
 		model.addAttribute("dto", list);
-		
+		model.addAttribute("category1",categoryList.subList(0, 8));
+		model.addAttribute("category2",categoryList.subList(8, 16));
+		model.addAttribute("category3",categoryList.subList(16, 26));
+		model.addAttribute("category4",categoryList.subList(26, 36));
 		return "home/list";
 	}
 	
-	@RequestMapping(value = "jsp/nangbu.do", method = RequestMethod.GET)
+	//냉부 첫화면
+	@RequestMapping(value = "nangbu.do", method = RequestMethod.GET)
 	public String nangbu(Model model) {	
 		List<NangbuDto> list = service.getNangbuIngre(1);
 		Map<Integer,String> category = service.getNangCategory();
@@ -77,14 +87,16 @@ public class BoardController implements ApplicationContextAware {
 		return "home/nangbu";
 	}
 	
-	@RequestMapping(value = "jsp/nangbu.do", method = RequestMethod.POST)
+	//냉부 재료로 검색 화면
+	@RequestMapping(value = "nangbu.do", method = RequestMethod.POST)
 	public String nangbuSearch(@RequestParam("ingredients[]") int ingredients[], Model model) {
 		List<CustomRecipeInfo> list = service.searchIngredient(ingredients);
 		model.addAttribute("dto", list);
 		return "home/searchList";
 	}
 	
-	@RequestMapping(value="jsp/category.do", method = RequestMethod.GET)
+	//냉부 재료 리스트 출력 GSON
+	@RequestMapping(value="category.do", method = RequestMethod.GET)
 	public void loadCategory(@RequestParam("ing_category") int ing_category,HttpServletResponse response) throws IOException{
 		List<NangbuDto> list = service.getNangbuIngre(ing_category);
 		Gson json = new Gson();
@@ -94,19 +106,22 @@ public class BoardController implements ApplicationContextAware {
 		out.print(json.toJson(list));
 	}
 	
-	@RequestMapping(value = "jsp/home.do", method = RequestMethod.POST)
+	//레시피 검색 결과화면
+	@RequestMapping(value = "home.do", method = RequestMethod.POST)
 	public String search(String search, Model model) {
 		List<CustomRecipeInfo> list = service.searchName(search);
 		model.addAttribute("dto", list);
 		return "home/searchList";
 	}
 	
-	@RequestMapping(value="jsp/admin.do", method=RequestMethod.GET)
+	//관리자 페이지
+	@RequestMapping(value="admin.do", method=RequestMethod.GET)
 	public String adminMain() {
 		return "admin/adminMain";
 	}
 	
-	@RequestMapping(value="jsp/loadCategory.do", method=RequestMethod.GET)
+	//카테고리 리스트 출력 **안씀**
+	@RequestMapping(value="loadCategory.do", method=RequestMethod.GET)
 	public void loadCategory(HttpServletResponse response) throws IOException {
 		List<Category> list = service.loadCategory();
 		Gson json = new Gson();
@@ -115,7 +130,8 @@ public class BoardController implements ApplicationContextAware {
 		out.print(json.toJson(list));
 	}
 	
-	@RequestMapping(value="jsp/searchCategory.do", method=RequestMethod.GET)
+	//카테고리로 검색 화면
+	@RequestMapping(value="searchCategory.do", method=RequestMethod.GET)
 	public String searchCategory(CategoryDto category, Model model) throws IOException {
 		List<Integer> integer = new ArrayList<>();
 		int[] cate = {category.getCategory1(),category.getCategory2(),category.getCategory3(),category.getCategory4()};
