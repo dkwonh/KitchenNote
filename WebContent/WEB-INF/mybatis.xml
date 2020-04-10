@@ -24,10 +24,5 @@
 		<property name="mapperLocations" value="classpath:sql/*.xml"></property>
 		<property name="configLocation" value="classpath:config.xml"></property>
 	</bean>
-	<!-- 세션 팩토리로 부터 자동으로 세션 객체를 리턴받는다 -->
-	<!-- <bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSession">
-		<constructor-arg ref="sqlSessionFactory"></constructor-arg>
-	</bean>
-	 -->
-	<bean id="customRecipeInfoDao" class="board.dao.CustomRecipeInfoDao" p:sqlSessionFactory-ref="sqlSessionFactory"/>
+	
 </beans>

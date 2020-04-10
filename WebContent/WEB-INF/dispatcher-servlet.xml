@@ -89,5 +89,5 @@
 			</list>
 		</property>
 	</bean> -->
-		
+		<bean id="customRecipeInfoDao" class="board.dao.CustomRecipeInfoDao" p:sqlSessionFactory-ref="sqlSessionFactory"/>
 </beans>
