@@ -66,17 +66,17 @@ public class CustomRecipeInfoDao extends SqlSessionDaoSupport{
 		return getSqlSession().selectList("board.searchCategory",category);
 	}
 	
-	/*
-	 * public int insert(Recipe_Info info) { return
-	 * getSqlSession().insert("board.insert",info); }
-	 */
+	//
+	  public int insert(Recipe_Info info) { return
+	  getSqlSession().insert("board.insert",info); }
+	 
 	  public int insertIngre(Dto dto) { return
 	  getSqlSession().insert("board.insertIngre", dto); }
 	 
 	
 	
-	/*재료 테이블 인서트 코드
-	 * public int insertIngre(Dto dto) { return
-	 * getSqlSession().insert("board.insertIngre", dto); }
-	 */
+	//재료 테이블 인서트 코드
+	  public int in(Dto dto) { return
+	  getSqlSession().insert("board.insertIngre", dto); }
+	 
 }

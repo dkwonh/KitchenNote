@@ -69,18 +69,18 @@ public class CustomRecipeInfoService {
 		return customRecipeInfoDao.searchCategory(category);
 	}
 	
-	/*
-	 * public int insert(Recipe_Info info) { return
-	 * customRecipeInfoDao.insert(info); }
-	 * 
-	 */ 
+	
+	  public int insert(Recipe_Info info) { return
+	  customRecipeInfoDao.insert(info); }
+	  
+	  
 	  public int insertIngre(Dto dto) { return
 	  customRecipeInfoDao.insertIngre(dto); }
 	 
 	
 	
-	/*재료 테이블 인서트 코드
-	 * public int insertIngre(Dto dto) { return
-	 * customRecipeInfoDao.insertIngre(dto); }
-	 */
+	//재료 테이블 인서트 코드
+	  public int in(Dto dto) { return
+	  customRecipeInfoDao.in(dto); }
+	 
 }

@@ -1,14 +1,27 @@
 package KitchenNote;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 
+/*recipe_id int PK 
+image varchar(200) 
+member_id varchar(45) 
+readcount int 
+scrap int 
+price int 
+recipe_name varchar(45) 
+recipe_exp varchar(200) 
+duration varchar(30) 
+reg_date*/
 public class Recipe_Info {
 	private int RECIPE_ID;
 	private String RECIPE_NM_KO;
 	private String SUMRY;
 	private String COOKING_TIME;
 	private String IMG_URL;
-	private String member_id="admin123@gmail.com";
+	private String member_id="admin123@kitchen.com";
+	
+	
 	public int getRECIPE_ID() {
 		return RECIPE_ID;
 	}

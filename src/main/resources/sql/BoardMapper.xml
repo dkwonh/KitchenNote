@@ -4,19 +4,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="board">
 	<select id="selectAll" resultType="board.dto.CustomRecipeInfo">
-		select * from custom_recipe_info natural join members limit 5
+		select * from recipe_info natural join members limit 5
 	</select>
 	
 	<select id="searchIngredient" resultType="board.dto.CustomRecipeInfo" parameterType="int">
 		select * 
-		from custom_recipe_info natural join members 
+		from recipe_info natural join members 
 		where recipe_id in (
 					select *
                     from
                     	<foreach collection="array" item="ingre" index="i" separator="natural join">
                     	(
                     		SELECT recipe_id
-							FROM ingredient natural join custom_recipe_ingredient
+							FROM ingredient natural join recipe_ingre
 							where ing_id = #{ingre}
                         ) as r#{i} 
                     	</foreach>
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="searchName" parameterType="string" resultType="board.dto.CustomRecipeInfo">
-		select * from custom_recipe_info natural join members where recipe_name like CONCAT('%',#{recipe_Name},'%')
+		select * from recipe_info natural join members where recipe_name like CONCAT('%',#{recipe_Name},'%')
 	</select>
 	
 	<select id="getNangbuIngre" parameterType="int" resultType="KitchenNote.NangbuDto">
@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="searchCategory" resultType="board.dto.CustomRecipeInfo" parameterType="int">
 		select * 
-		from custom_recipe_info natural join members 
+		from recipe_info natural join members 
 		where recipe_id in (
 					select *
                     from
@@ -61,6 +61,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     	group by r0.recipe_id
 
                     )
+	</select>
+	
+	<insert id="insertIngre" parameterType="KitchenNote.Dto">
+		insert into Ingredient values(#{ing_id},#{ing_name},#{ing_category},#{category_name})
+	</insert>
+	
+	<insert id="insert" parameterType="KitchenNote.Recipe_Info">
+		insert into Recipe_Info(recipe_id,image,member_id,recipe_name,recipe_exp,duration) values(#{RECIPE_ID},#{IMG_URL},#{member_id},#{RECIPE_NM_KO},#{SUMRY},#{COOKING_TIME}) 
+	</insert>
+	
+	<select id="ingreid" parameterType="String" resultType="int">
+		select ing_id from Ingredient where ing_name = #{IRDNT_NM}
+	</select>
+	
+	<insert id="ingreinsert" parameterType="KitchenNote.Ingredient">
+		insert into Recipe_Ingre values(#{RECIPE_ID},#{IRDNT_CPCTY},#{ing_id})
+	</insert>
+	
+	<insert id="insertPro" parameterType="KitchenNote.Recipe_Pro">
+		insert into Recipe_Pro values(#{RECIPE_ID},#{COOKING_DC},#{STRE_STEP_IMAGE_URL},#{COOKING_NO})
+	</insert>
+	
+	<select id="searchRecipe" parameterType="int" resultType="KitchenNote.Recipe_Info">
+		select * from Recipe_Info where recipe_id = #{info}
 	</select>
 </mapper>
 
